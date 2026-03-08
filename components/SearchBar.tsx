@@ -1,8 +1,18 @@
-import React from 'react';
-import { MapPin, Search } from 'lucide-react';
-import './SearchBar.css';
+import React from "react";
+import { MapPin, Search } from "lucide-react";
+import "./SearchBar.css";
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  onSearchSubmit?: () => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({
+  searchValue = "",
+  onSearchChange,
+  onSearchSubmit,
+}) => {
   return (
     <div className="search-bar-container">
       {/* Location Dropdown */}
@@ -12,14 +22,21 @@ const SearchBar: React.FC = () => {
       </div>
 
       {/* Search Input */}
-      <input 
-        type="text" 
-        placeholder="Find your favorite brew..." 
+      <input
+        type="text"
+        value={searchValue}
+        onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && onSearchSubmit) {
+            onSearchSubmit();
+          }
+        }}
+        placeholder="Find your favorite brew..."
         className="search-input"
       />
 
       {/* Search Icon */}
-      <button className="search-icon-btn">
+      <button className="search-icon-btn" onClick={onSearchSubmit}>
         <Search />
       </button>
     </div>
